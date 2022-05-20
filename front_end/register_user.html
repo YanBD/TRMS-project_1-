@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authorization request</title>
+    <style>
+        body {
+            background-image: url('https://static.wikia.nocookie.net/nopixel/images/4/45/Cerberus.png/revision/latest?cb=20210610093200');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: initial;
+            background-position: center;
+            background-color: gold;
+            text-align: center;
+            color: maroon;
+        }
+        #login {
+            position: sticky;
+            margin-top:10%;
+            color: gold;
+            width: auto;  
+        }
+        label {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div id="login";>
+        <label for="emp_id">Employee Id:</label>
+        <br>
+        <input type="text" id="emp">
+        <br>
+        <label for="username">Username:</label>
+        <br>
+        <input type="text" id="User">
+        <br>
+        <label for="passphrase">Passphrase:</label>
+        <br>
+        <input type="text" id="phrase">
+        <br>
+        <button onclick="register()">Register</button>
+        
+
+    </div>
+
+</body>
+<script>
+    async function register(){
+        const empvar = document.getElementById("emp").value
+        const uservar = document.getElementById("User").value
+        const phrasevar = document.getElementById("phrase").value
+
+        const data = {
+            empId: empvar,
+            username: uservar,
+            passphrase: phrasevar
+        }
+
+        const url = "http://127.0.0.1:5000/userbase"
+
+        const httpresponse = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const body = await httpresponse.json()
+        if (body) {
+            alert("User Created")
+            window.location.href='login.html'
+        } else {
+            alert("failed to create user")
+        }
+    }
+</script>
+</html>

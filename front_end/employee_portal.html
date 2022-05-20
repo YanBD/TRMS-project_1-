@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employee Portal</title>
+    <style>
+        body {
+            background-image: url('https://static.wikia.nocookie.net/nopixel/images/4/45/Cerberus.png/revision/latest?cb=20210610093200');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: initial;
+            background-position: center;
+            background-color: gold;
+            text-align: left;
+            color: maroon;
+        }
+    </style>
+</head>
+<body onload="get_employee()">
+    <h3>Welcome </h3>
+       <div>
+        <table>
+            <tr>
+                <td>Employee id</td>
+                <td id="eid">-</td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td id="lname"></td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td id="fname"></td>
+            </tr>
+
+            <tr>
+                <td>Title</td>
+                <td id="Title"></td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td id ="dpart"></td>
+            </tr>
+        </table>
+
+        <a href="tuition_reimbursement.html">Start Tuition Reimbursement</a>
+        <button id="addemployee" hidden onclick="location.href='newemp.html'">Add Employee</button>
+
+    </div>
+    <br>
+    <button onclick="location.href='home.html'">Log Out</button>
+</body>
+<script>
+    const id = sessionStorage.getItem('user')
+    console.log(sessionStorage.user)
+    async function get_employee() {
+        const httpresponse = `http://localhost:5000/employee/${id}`
+        const url = await fetch(httpresponse)
+        const body = await url.json()
+        console.log(body)
+              
+
+        populate(body)
+
+        toggle()
+    
+    function toggle() {
+        const tit = document.getElementById('Title').innerHTML
+        const aempl = document.getElementById("addemployee")
+        console.log(tit);
+        if (tit == 'Department Head') {
+            aempl.removeAttribute('hidden') 
+        }
+    }
+
+
+    function populate(body) {
+        document.getElementById("eid").innerHTML = body.empId
+        document.getElementById("lname").innerHTML = body.lastName
+        document.getElementById("fname").innerHTML = body.firstName
+        document.getElementById('Title').innerHTML = body.title
+        document.getElementById("dpart").innerHTML = body.department
+    }
+    
+
+}
+</script>
+</html>

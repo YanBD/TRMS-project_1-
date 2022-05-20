@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuition Reimbursement</title>
+    <style>
+        body{
+            background-color: red;
+        }
+        #eventtab {
+            position: absolute;
+            right: 50%;
+            color: gold;
+
+        }
+    </style>
+</head>
+<body onload="get_ev_type">
+<table id = eventtab style="border:5px solid gold ;">
+    <tr>
+        <td>Event ID</td>
+        <td id="evid"></td>
+    </tr>
+    <tr>
+        <td>Event Type</td>
+        <td id="evType"></td>
+    </tr>
+    <tr>
+        <td>Reimbursement Coverage</td>
+        <td id="reimcovr"></td>
+    </tr>
+</table>
+<table id="reimbursment">
+    <tr>
+        <td>Employee Id</td>
+        <td><input type="number" min="1" id="empid"></td>
+    </tr>
+    <tr>
+        <td>Event Location</td>
+        <td><input type="text" id="evloc"></td>
+    </tr>
+    <tr>
+        <td>Event Cost</td>
+        <td><input id="evcost" type="number" min="1"></td>
+    </tr>
+    <tr>
+        <td>Event Type</td>
+        <td><input onmouseover="get_ev_type()" id="EventType" type="text">UnC,Sem,CPC,Cer,Tec,Oth</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td><input id="descr" type="text"></td>
+    </tr>
+    <tr>
+        <td>Justification</td>
+        <td><input id="just" type="text"></td>
+    </tr>
+    <tr>
+        <td>Grading Format</td>
+        <td><input id="Gradingf" type="text"></td>
+    </tr>
+    <tr>
+        <td>Grade</td>
+        <td><input id="grade" type="text"></td>
+    </tr>
+
+</table>
+<button onclick="submit()">Submit Tuition Reimbursement</button>
+    
+</body>
+<script>
+    async function get_ev_type() {
+        id = document.getElementById('EventType').value
+        const url = `http://localhost:5000/events/${id}`
+        const httpResponse = await fetch(url)
+        const body = await httpResponse.json()
+        document.getElementById("evid").innerHTML = body.eventId
+        document.getElementById("evType").innerHTML = body.eventType
+        document.getElementById("reimcovr").innerHTML = body.reimbursementCoverage
+    }
+    async function submit() {
+        const data = {
+            empId: document.getElementById("empid").value,
+            evLocation: document.getElementById("evloc").value,
+            evCost: document.getElementById('evcost').value,
+            evType: document.getElementById('EventType').value,
+            description: document.getElementById("descr").value,
+            justification: document.getElementById("just").value,
+            gradingFormat: document.getElementById("Gradingf").value,
+            grade: document.getElementById("grade").value
+        }
+        const url = "http://localhost:5000/reimbursement"
+        const httpResponse = await fetch(url,{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const body = await httpResponse.json();
+        if (body) {
+            alert("Reimbursement Started")
+        } else {
+            alert("Could not start Reimbursement")
+        }
+    }
+
+</script>
+</html>

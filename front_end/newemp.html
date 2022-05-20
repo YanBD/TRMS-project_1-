@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    
+    <style>
+        body {
+            background-image: url('https://static.wikia.nocookie.net/nopixel/images/1/1c/Cerberus_Lang_Leslie_Dean.png/revision/latest?cb=20210619161534');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: contain;
+            background-position: center;
+            
+            text-align: left;
+            color: maroon;
+        }
+    </style>
+</head>
+<body>
+    <h2>Employee Creation</h2>
+    <table>
+        <tr>
+            <td>Last Name</td>
+            <td><input id="lname" type="text"></td>
+        </tr>
+        <tr>
+            <td>First Name</td>
+            <td><input id="fname" type="text"></td>
+        </tr>
+        <tr>
+            <td>Title</td>
+            <td><input id="Title" type="text"></td>
+        </tr>
+        <tr>
+            <td>Department</td>
+            <td><input id="dpart" type="text"></td>
+        </tr>
+        <tr>
+            <td>Supervisor</td>
+            <td><input id="svisor" type="number" value="1" min="1"></td>
+        </tr>
+    </table>
+    <button onclick="add_employee()">Register User</button>
+    
+</body>
+<script>
+    async function add_employee() {
+        const lnameval = document.getElementById("lname").value
+        const fnameval = document.getElementById("fname").value
+        const titleval = document.getElementById("Title").value
+        const dpartval = document.getElementById("dpart").value
+        const svisor = document.getElementById("svisor").value
+
+        const data = {
+            lastName: lnameval,
+            firstName: fnameval,
+            title: titleval,
+            supervisor: svisor,
+            department: dpartval,
+        }
+        const url = "http://localhost:5000/employee"
+
+        const httpresponse = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
+        });
+        
+        const body = await httpresponse.json()
+        if (body){
+            alert('Employee Added')
+        } else
+            alert('Employee Could Not Be added')
+    }
+</script>
+</html>
